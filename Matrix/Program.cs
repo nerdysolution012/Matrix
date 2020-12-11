@@ -6,191 +6,165 @@ using System.Threading.Tasks;
 
 namespace Matrix
 {
-    class Program
+    public class Matric
     {
         static void Main(string[] args)
         {
-            determinant();
+            try
+            { 
+                Console.WriteLine("Enter the first dimension ");
+                int a = int.Parse(Console.ReadLine());
 
-        }
+                Console.WriteLine("Enter the second dimension");
+                int b = int.Parse(Console.ReadLine());
 
-        public static double determinant(double[,] matrix, int size)
-        {
-            double[] diviser = new double[size];// this will be used to make 0 all the elements of a row except (i,i)th value.
-            double[] temp = new double[size]; // this will hold the modified ith row after divided by (i,i)th value.
-            Boolean flag = false; // this will limit the operation to be performed only when loop n != loop i
-            double determinant = 1;
+                Console.WriteLine("Enter the third dimension");
+                int c = int.Parse(Console.ReadLine());
 
-            if (varifyRowsAndColumns(matrix, size)) // verifies that no rows or columns are similar or multiple of another row or column
-                for (int i = 0; i < size; i++)
+                Console.WriteLine("Enter the forth dimension ");
+                int d = int.Parse(Console.ReadLine());
+                if (c != d)
                 {
-                    int count = 0;
-                    //this will hold the values to be multiplied by temp matrix
-                    double[] multiplier = new double[size - 1];
-                    diviser[i] = matrix[i, i];
-                    //if(i,i)th value is 0, determinant shall be 0
-                    if (diviser[i] == 0)
-                    {
-                        determinant = 0;
-                        break;
-                    }
-                    /*
-                     * whole ith row will be divided by (i,i)th value and result will be stored in temp matrix.
-                     * this will generate 1 at (i,i)th position in temp matrix i.e. ith row of matrix
-                     */
-                    for (int j = 0; j < size; j++)
-                    {
-                        temp[j] = matrix[i, j] / diviser[i];
-                    }
-                    //setting up multiplier to be used for multiplying the ith row of temp matrix
-                    for (int o = 0; o < size; o++)
-                        if (o != i)
-                            multiplier[count++] = matrix[o, i];
+                    Console.WriteLine("Error:The third and forth size must be the same to calculate determinant and square correctly");
+                    Console.ReadLine();
+                }
 
-                    count = 0;
-                    //for creating 0s at every other position than (i,i)th
-                    for (int n = 0; n < size; n++)
+                else
+                {
+                    int[,,,] myarray = new int[a, b, c, d];
+                    // Reading the array to the console
+                    for (int i = 0; i < a; i++)
                     {
-                        for (int k = 0; k < size; k++)
+                        for (int j = 0; j < b; j++)
                         {
-                            if (n != i)
+                            for (int k = 0; k < c; k++)
                             {
-                                flag = true;
-                                matrix[n, k] -= (temp[k] * multiplier[count]);
-                            }
-                        }
-                        if (flag)
-                            count++;
-                        flag = false;
-                    }
-
-                }
-            else determinant = 0;
-            //if determinant is not 0, (i,i)th element will be multiplied and the result will be determinant
-            if (determinant != 0)
-                for (int i = 0; i < size; i++)
-                {
-                    determinant *= matrix[i, i];
-                }
-            return determinant;
-        }
-
-
-        private static Boolean varifyRowsAndColumns(double[,] matrix, int size)
-        {
-            List<double[]> rows = new List<double[]>();
-            List<double[]> columns = new List<double[]>();
-
-
-            for (int j = 0; j < size; j++)
-            {
-                double[] temp = new double[size];
-                for (int k = 0; k < size; k++)
-                {
-                    temp[j] = matrix[j, k];
-                }
-                rows.Add(temp);
-            }
-
-            for (int j = 0; j < size; j++)
-            {
-                double[] temp = new double[size];
-                for (int k = 0; k < size; k++)
-                {
-                    temp[j] = matrix[k, j];
-                }
-                columns.Add(temp);
-            }
-
-            if (!RowsAndColumnsComparison(rows, size))
-                return false;
-            if (!RowsAndColumnsComparison(columns, size))
-                return false;
-            return true;
-        }
-        private static Boolean RowsAndColumnsComparison(List<double[]> rows, int size)
-        {
-            int countEquals = 0;
-            int countMod = 0;
-            int countMod2 = 0;
-
-            for (int i = 0; i < rows.Count; i++)
-            {
-                for (int j = 0; j < rows.Count; j++)
-                {
-                    if (i != j)
-                    {
-                        double min = returnMin(rows.ElementAt(i), rows.ElementAt(j));
-                        double max = returnMax(rows.ElementAt(i), rows.ElementAt(j));
-
-                        for (int l = 0; l < size; l++)
-                        {
-                            if (rows.ElementAt(i)[l] == rows.ElementAt(j)[l])
-                                countEquals++;
-
-                            for (int m = (int)min; m <= max; m++)
-                            {
-                                if (rows.ElementAt(i)[l] % m == 0 && rows.ElementAt(j)[l] % m == 0)
-                                    countMod++;
-
-                                if (rows.ElementAt(j)[l] % m == 0 && rows.ElementAt(i)[l] % m == 0)
-                                    countMod2++;
+                                for (int l = 0; l < d; l++)
+                                {
+                                    Console.WriteLine("Please enter matrix[{0},{1},{2},{3}]", i, j, k, l);
+                                    myarray[i, j, k, l] = int.Parse(Console.ReadLine());
+                                }
                             }
                         }
 
-                        if (countEquals == size)
-                        {
-                            return false;
-                            // one row is equal to another row. determinant is zero
-                        }
-
-                        if (countMod == size)
-                        {
-                            return false;
-                        }
-
-                        if (countMod2 == size)
-                        {
-                            return false;
-                        }
                     }
+                    // Displaying the array to the console
+                    int det1 = 0;
+                    Console.WriteLine();
+                    Console.WriteLine("The matrices formed is displayed below");
+                    Console.WriteLine();
+                    for (int i = 0; i < myarray.GetLength(0); i++)
+                    {
+                        for (int j = 0; j < myarray.GetLength(1); j++)
+                        {
+                            for (int k = 0; k < myarray.GetLength(2); k++)
+                            {
+
+                                for (int l = 0; l < myarray.GetLength(3); l++)
+                                {
+
+                                    Console.Write(myarray[i, j, k, l] + "\t");
+                                }
+                                Console.WriteLine();
+                            }
+                            Console.WriteLine();
+                        }
+
+                        Console.WriteLine();
+                    }
+                    // Calculating determinant: Using Crammers Rule/sarrus rule
+                    if (c == 3 && d == 3)
+                    {
+                        for (int k = 0; k < c; k++)
+                        {
+                            det1 += myarray[0, 0, 0, k] * (myarray[0, 0, 1, (k + 1) % c] * myarray[0, 0, 2, (k + 2) % c] - myarray[0, 0, 1, (k + 2) % c] * myarray[0, 0, 2, (k + 1) % c]);
+                        }
+                        Console.WriteLine($"The determinant  of the matrix is {det1 }  and the square of the matrix is");
+                        Console.WriteLine();
+
+                    }
+
+                    if (c == 4 && d == 4)
+                    {
+
+                        int w = myarray[0, 0, 0, 0] * (((myarray[0, 0, 1, 3] * myarray[0, 0, 2, 1] * myarray[0, 0, 3, 2] + myarray[0, 0, 1, 2] * myarray[0, 0, 2, 3] * myarray[0, 0, 3, 1] + myarray[0, 0, 1, 1] * myarray[0, 0, 2, 2] * myarray[0, 0, 3, 3]) -
+                            (myarray[0, 0, 1, 2] * myarray[0, 0, 2, 1] * myarray[0, 0, 3, 3] + myarray[0, 0, 1, 1] * myarray[0, 0, 2, 3] * myarray[0, 0, 3, 2] + myarray[0, 0, 1, 3] * myarray[0, 0, 2, 2] * myarray[0, 0, 3, 1])));
+
+                        int x = myarray[0, 0, 0, 1] * (((myarray[0, 0, 1, 3] * myarray[0, 0, 2, 0] * myarray[0, 0, 3, 2] + myarray[0, 0, 1, 2] * myarray[0, 0, 2, 3] * myarray[0, 0, 3, 0] + myarray[0, 0, 1, 0] * myarray[0, 0, 2, 2] * myarray[0, 0, 3, 3]) -
+                            (myarray[0, 0, 1, 2] * myarray[0, 0, 2, 0] * myarray[0, 0, 3, 3] + myarray[0, 0, 1, 0] * myarray[0, 0, 2, 3] * myarray[0, 0, 3, 2] + myarray[0, 0, 1, 3] * myarray[0, 0, 2, 2] * myarray[0, 0, 3, 0])));
+
+                        int y = myarray[0, 0, 0, 2] * (((myarray[0, 0, 1, 3] * myarray[0, 0, 2, 0] * myarray[0, 0, 3, 1] + myarray[0, 0, 1, 1] * myarray[0, 0, 2, 3] * myarray[0, 0, 3, 0] + myarray[0, 0, 1, 0] * myarray[0, 0, 2, 1] * myarray[0, 0, 3, 3]) -
+                           (myarray[0, 0, 1, 1] * myarray[0, 0, 2, 0] * myarray[0, 0, 3, 3] + myarray[0, 0, 1, 0] * myarray[0, 0, 2, 3] * myarray[0, 0, 3, 1] + myarray[0, 0, 1, 3] * myarray[0, 0, 2, 1] * myarray[0, 0, 3, 0])));
+
+                        int z = myarray[0, 0, 0, 3] * (((myarray[0, 0, 1, 2] * myarray[0, 0, 2, 0] * myarray[0, 0, 3, 1] + myarray[0, 0, 1, 1] * myarray[0, 0, 2, 2] * myarray[0, 0, 3, 0] + myarray[0, 0, 1, 0] * myarray[0, 0, 2, 1] * myarray[0, 0, 3, 2]) -
+                            (myarray[0, 0, 1, 2] * myarray[0, 0, 2, 1] * myarray[0, 0, 3, 0] + myarray[0, 0, 1, 0] * myarray[0, 0, 2, 2] * myarray[0, 0, 3, 1] + myarray[0, 0, 1, 1] * myarray[0, 0, 2, 0] * myarray[0, 0, 3, 2])));
+
+                        int result = w - x + y - z;
+                        Console.WriteLine($"The determinant of the matrix is {result} and the square is given below");
+                        Console.WriteLine();
+
+
+                    }
+                    //To calculate the square of the matrix
+
+                    if (c == 3 && d == 3 || c == 4 && d == 4)
+                    {
+                        int[,,,] squareResult = new int[a, b, c, d];
+                        for (int i = 0; i < myarray.GetLength(0); i++)
+                        {
+                            for (int j = 0; j < myarray.GetLength(1); j++)
+                            {
+                                for (int k = 0; k < myarray.GetLength(2); k++)
+                                {
+
+                                    for (int l = 0; l < myarray.GetLength(3); l++)
+                                    {
+                                        squareResult[i, j, k, l] = 0;
+                                        for (int m = 0; m < c; m++)
+                                        {
+                                            squareResult[i, j, k, l] += myarray[i, j, k, m] * myarray[i, j, m, l];
+
+                                        }
+                                    }
+
+                                }
+
+                            }
+
+
+                        }
+
+                        // Displaying the square of the Matrix
+
+                        for (int i = 0; i < myarray.GetLength(0); i++)
+                        {
+                            for (int j = 0; j < myarray.GetLength(1); j++)
+                            {
+                                for (int k = 0; k < myarray.GetLength(2); k++)
+                                {
+
+                                    for (int l = 0; l < myarray.GetLength(3); l++)
+                                    {
+
+                                        Console.Write(squareResult[i, j, k, l] + "\t");
+                                    }
+                                    Console.WriteLine();
+                                }
+                                Console.WriteLine();
+                            }
+
+                            Console.WriteLine();
+                        }
+
+                    }
+
                 }
             }
-            return true;
-        }
-        private static double returnMin(double[] row1, double[] row2)
-        {
-            double min1 = row1[0];
-            double min2 = row2[0];
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
 
-            for (int i = 1; i < row1.Length; i++)
-                if (min1 > row1[i])
-                    min1 = row1[i];
-
-            for (int i = 1; i < row2.Length; i++)
-                if (min2 > row2[i])
-                    min2 = row2[i];
-
-            if (min1 < min2)
-                return min1;
-            else return min2;
-        }
-        private static double returnMax(double[] col1, double[] col2)
-        {
-            double max1 = col1[0];
-            double max2 = col2[0];
-
-            for (int i = 1; i < col1.Length; i++)
-                if (max1 < col1[i])
-                    max1 = col1[i];
-
-            for (int i = 1; i < col2.Length; i++)
-                if (max2 < col2[i])
-                    max2 = col2[i];
-
-            if (max1 > max2)
-                return max1;
-            else return max2;
+            }
         }
     }
 }
